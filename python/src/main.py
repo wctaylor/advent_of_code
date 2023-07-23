@@ -18,7 +18,7 @@ def main():
     }
 
     # This is the base Advent of Code directory, not just the python directory
-    base_dir = pathlib.Path(f"{__file__}").parent.parent.parent.resolve()
+    base_dir = pathlib.Path(f"{__file__}").parents[2].resolve()
 
     parser = argparse.ArgumentParser(
         description="Runs Advent of Code programs to solve puzzle inputs",
