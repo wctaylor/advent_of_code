@@ -19,7 +19,15 @@ def solve(puzzle: list[str]) -> None:
     ------
     At what position in the list of characters does Santa first enter
     the basement?
+    
+    :param puzzle: the contents of the puzzle file
     """
+
+    if len(puzzle) > 1:
+        raise ValueError(
+            f"Unexpected puzzle length: expected a length of 1, "
+            f"but found {len(puzzle)}."
+        )
 
     chars = puzzle[0]
 
