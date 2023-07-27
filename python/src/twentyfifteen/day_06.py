@@ -99,7 +99,6 @@ def solve(puzzle: list[str]) -> None:
     :param puzzle: the contents of the puzzle file
     """
 
-
     total_on = solve_part(puzzle, 1)
     total_brightness = solve_part(puzzle, 2)
 
