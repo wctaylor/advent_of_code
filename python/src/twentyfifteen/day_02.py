@@ -21,8 +21,8 @@ def solve(puzzle: list[str]) -> None:
     :param puzzle: the contents of the puzzle file
     """
 
-    total_paper = 0
-    total_ribbon = 0
+    total_paper_sqft = 0
+    total_ribbon_ft = 0
     for dimensions in puzzle:
         dims = dimensions.split("x")
         if len(dims) != 3:
@@ -30,30 +30,33 @@ def solve(puzzle: list[str]) -> None:
                 f"Found an unexpected line.\n"
                 f"Expected a form of 'LxWxH', but found '{dimensions}'"
             )
-
-        length = int(dims[0])
-        width = int(dims[1])
-        height = int(dims[2])
+        (length, width, height) = (int(x) for x in dims)
         volume = length * width * height
 
         # The elves need enough wrapping paper for the surface area of the
         # rectangular prism, plus the area of the smallest face
-        area_1 = 2 * length * width
-        area_2 = 2 * length * height
-        area_3 = 2 * width * height
-        min_area = min([area_1, area_2, area_3])
-        total_paper = total_paper + area_1 + area_2 + area_3 + min_area
+        areas_sqft = (
+            length * width,
+            length * height,
+            width * height,
+        )
+        total_paper_sqft = (
+            total_paper_sqft + min(areas_sqft) + 2 * sum(areas_sqft)
+        )
 
         # The elves need enough ribbon to wrap the shortest perimeter of any
         # face, plus the volume of the prism for the bow
-        perimeter_1 = 2 * (length + width)
-        perimeter_2 = 2 * (length + height)
-        perimeter_3 = 2 * (width + height)
-        min_perimeter = min([perimeter_1, perimeter_2, perimeter_3])
-        total_ribbon = total_ribbon + min_perimeter + volume
+        perimeters_ft = (
+            2 * (length + width),
+            2 * (length + height),
+            2 * (width + height),
+        )
+        total_ribbon_ft = total_ribbon_ft + min(perimeters_ft) + volume
 
     print(
         f"Part 1: The elves need a total of "
-        f"{total_paper} square feet of wrapping paper."
+        f"{total_paper_sqft} square feet of wrapping paper."
     )
-    print(f"Part 2: The elves need a total of {total_ribbon} feet of ribbon.")
+    print(
+        f"Part 2: The elves need a total of {total_ribbon_ft} feet of ribbon."
+    )
