@@ -73,6 +73,7 @@ def main():
 
     YEARS = {
         2015: "twentyfifteen",
+        2023: "twentytwentythree",
     }
     if year not in YEARS:
         raise ValueError(
