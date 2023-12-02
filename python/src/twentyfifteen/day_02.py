@@ -1,24 +1,26 @@
 """
 Advent of Code 2015 Day 2
+
+The input is a list of lines, where each line is of the form
+length x width x height, with no spaces.
+Example: 1x2x3
+
+Part 1
+------
+How much total wrapping paper do the elves need?
+
+Part 2
+------
+How much total ribbon do the elves need?
 """
 
 
-def solve(puzzle: list[str]) -> None:
+def solve(puzzle: list[str], part: int | None = None) -> None:
     """
     Solve the 2015 Day 2 puzzle.
-    The input is a list of lines, where each line is of the form
-    length x width x height, with no spaces.
-    Example: 1x2x3
-
-    Part 1
-    ------
-    How much total wrapping paper do the elves need?
-
-    Part 2
-    ------
-    How much total ribbon do the elves need?
 
     :param puzzle: the contents of the puzzle file
+    :param part: the part of the puzzle to solve. If None, solve both parts.
     """
 
     total_paper_sqft = 0
@@ -53,10 +55,13 @@ def solve(puzzle: list[str]) -> None:
         )
         total_ribbon_ft = total_ribbon_ft + min(perimeters_ft) + volume
 
-    print(
-        f"Part 1: The elves need a total of "
-        f"{total_paper_sqft} square feet of wrapping paper."
-    )
-    print(
-        f"Part 2: The elves need a total of {total_ribbon_ft} feet of ribbon."
-    )
+    if part == 1 or part is None:
+        print(
+            f"Part 1: The elves need a total of "
+            f"{total_paper_sqft} square feet of wrapping paper."
+        )
+    if part == 2 or part is None:
+        print(
+            f"Part 2: The elves need a total of "
+            f"{total_ribbon_ft} feet of ribbon."
+        )

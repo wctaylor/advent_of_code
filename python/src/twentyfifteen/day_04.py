@@ -1,50 +1,50 @@
 """
 Advent of Code 2015 Day 4
+
+The input contains a string representing a secret key for MD5 hashing.
+
+Part 1
+------
+What is the smallest positive number that produces an MD5 hash with
+five leading zeros?
+
+Part 2
+------
+What is the smallest positive number that produces an MD5 hash with
+six leading zeros?
 """
 
 import hashlib
 
 
-def find_leading_zeros(key: str, num_zeroes: int) -> int:
+def _generate_hash(key: str, num_zeros: int) -> int:
     """
-    Find the integer which combines with key to create an MD5 hash that
-    starts with num_zeroes
+    Generate an MD5 hash of the input key with a number of leading zeros
 
-    :param key: The key used by the MD5 hash
-    :param num_zeroes:
-        The number of zeroes the resulting digest must start with
-    :returns: The integer that results in the desired hash digest
+    :param key: The input to hash
+    :param num_zeros: The number of zeros the hash must start with
+    :returns: The first positive integer that generates the required hash
     """
 
-    number = 1
-    hash_found = False
-    while not hash_found:
+    hash_start = "0" * num_zeros
+    integer = 0
+    solution = None
+    while solution is None:
+        integer = integer + 1
         md5 = hashlib.md5()
-        md5.update(f"{key}{number}".encode("utf-8"))
-        if md5.hexdigest().startswith("0" * num_zeroes):
-            hash_found = True
-        else:
-            number = number + 1
+        md5.update(f"{key}{integer}".encode("utf-8"))
+        if md5.hexdigest().startswith(hash_start):
+            solution = integer
 
-    return number
+    return solution
 
 
-def solve(puzzle: list[str]) -> None:
+def solve(puzzle: list[str], part: int | None = None) -> None:
     """
     Solve the 2015 Day 4 puzzle.
-    The input contains a string representing a secret key for MD5 hashing.
-
-    Part 1
-    ------
-    What is the smallest positive number that produces an MD5 hash with
-    five leading zeros?
-
-    Part 2
-    ------
-    What is the smallest positive number that produces an MD5 hash with
-    six leading zeros?
 
     :param puzzle: the contents of the puzzle file
+    :param part: the part of the puzzle to solve. If None, solve both parts.
     """
 
     if len(puzzle) > 1:
@@ -52,16 +52,15 @@ def solve(puzzle: list[str]) -> None:
             f"Unexpected puzzle length: expected a length of 1, "
             f"but found {len(puzzle)}."
         )
-
     key = puzzle[0]
-    five_zero_int = find_leading_zeros(key, 5)
-    six_zero_int = find_leading_zeros(key, 6)
 
-    print(
-        f"Part 1: The integer which produces five leading zeroes is "
-        f"{five_zero_int}"
-    )
-    print(
-        f"Part 2: The integer which produces six leading zeroes is "
-        f"{six_zero_int}"
-    )
+    if part == 1 or part is None:
+        print(
+            f"Part 1: The integer which produces five leading zeroes is "
+            f"{_generate_hash(key, 5)}"
+        )
+    if part == 2 or part is None:
+        print(
+            f"Part 2: The integer which produces six leading zeroes is "
+            f"{_generate_hash(key, 6)}"
+        )

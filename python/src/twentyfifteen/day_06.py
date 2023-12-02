@@ -1,24 +1,35 @@
 """
 Advent of Code 2015 Day 6
+
+The puzzle contains a series of instructions for setting the state
+of lights in a 1000 x 1000 grid.
+
+Part 1
+------
+How many lights are on?
+
+Part 2
+------
+What is the total brightness?
 """
 
 import re
 
 
-def solve_part(puzzle: list[str], part_num: int) -> int:
+def _solve_part(puzzle: list[str], part: int) -> int:
     """
     Each part essentially does the same thing, except uses different rules
     to update the grid, so this function uses the input part number to
     decide on the rules
 
     :param puzzle: the contents of the puzzle file
-    :param part_num: which part to solve
+    :param part: which part to solve
     :returns: the solution to the part in question
     """
 
-    if part_num not in {1, 2}:
+    if part not in {1, 2}:
         raise ValueError(
-            f"The part number must be either 1 or 2, not {part_num}"
+            f"The part number must be either 1 or 2, not {part}"
         )
 
     GRID_DIMENSIONS = (1000, 1000)
@@ -53,25 +64,25 @@ def solve_part(puzzle: list[str], part_num: int) -> int:
             case "turn off":
                 for i in range(indices_start[0], indices_end[0] + 1):
                     for j in range(indices_start[1], indices_end[1] + 1):
-                        if part_num == 1:
+                        if part == 1:
                             grid[(i, j)] = 0
-                        elif part_num == 2:
+                        elif part == 2:
                             grid[(i, j)] = grid[(i, j)] - 1
                             if grid[(i, j)] < 0:
                                 grid[(i, j)] = 0
             case "turn on":
                 for i in range(indices_start[0], indices_end[0] + 1):
                     for j in range(indices_start[1], indices_end[1] + 1):
-                        if part_num == 1:
+                        if part == 1:
                             grid[(i, j)] = 1
-                        elif part_num == 2:
+                        elif part == 2:
                             grid[(i, j)] = grid[(i, j)] + 1
             case "toggle":
                 for i in range(indices_start[0], indices_end[0] + 1):
                     for j in range(indices_start[1], indices_end[1] + 1):
-                        if part_num == 1:
+                        if part == 1:
                             grid[(i, j)] = grid[(i, j)] ^ 1  # XOR
-                        elif part_num == 2:
+                        elif part == 2:
                             grid[(i, j)] = grid[(i, j)] + 2
             case _:
                 raise ValueError(
@@ -82,25 +93,21 @@ def solve_part(puzzle: list[str], part_num: int) -> int:
     return sum(value for value in grid.values())
 
 
-def solve(puzzle: list[str]) -> None:
+def solve(puzzle: list[str], part: int | None = None) -> None:
     """
     Solve the 2015 Day 6 puzzle.
-    The puzzle contains a series of instructions for setting the state
-    of lights in a 1000 x 1000 grid.
-
-    Part 1
-    ------
-    How many lights are on?
-
-    Part 2
-    ------
-    What is the total brightness?
 
     :param puzzle: the contents of the puzzle file
+    :param part: the part of the puzzle to solve. If None, solve both parts.
     """
 
-    total_on = solve_part(puzzle, 1)
-    total_brightness = solve_part(puzzle, 2)
+    if part == 1 or part is None:
+        print(
+            f"Part 1: The total number of lights that are on is: "
+            f"{_solve_part(puzzle, 1)}."
+        )
+    if part == 2 or part is None:
+        print(
+            f"Part 2: The total brightness is: {_solve_part(puzzle, 2)}."
+        )
 
-    print(f"Part 1: The total number of lights that are on is: {total_on}.")
-    print(f"Part 2: The total brightness is: {total_brightness}.")
