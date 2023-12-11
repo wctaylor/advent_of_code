@@ -76,9 +76,7 @@ def main():
         2023: "twentytwentythree",
     }
     if year not in YEARS:
-        raise ValueError(
-            f"Advent of Code {year} is not currently supported"
-        )
+        raise ValueError(f"Advent of Code {year} is not currently supported")
     year_module = YEARS[year]
 
     day_module = f"day_{day:02d}"
@@ -99,7 +97,7 @@ def main():
         )
 
     with open(puzzle_input, "r") as data:
-        puzzle = data.readlines()
+        puzzle = data.read().splitlines()
 
     module = importlib.import_module(f"{year_module}.{day_module}")
     module.solve(puzzle, part=part)
