@@ -16,7 +16,7 @@ Part 2
 The seed number input generates ranges of seed numbers,
 so there are more seed numbers to check.
 
-In both parts,what is the lowest location number
+In both parts, what is the lowest location number
 that corresponds to any of the initial seed numbers?
 """
 
@@ -112,6 +112,7 @@ def solve(puzzle: list[str], part: int | None = None) -> None:
             if location is None or location > result:
                 location = result
         print(f"The smallest location value is {location}.")
+
     # Part 2: The seeds values actually describe ranges,
     # so have to do some extra looping.
     # It is a bit faster to just iterate through the locations and then stop
