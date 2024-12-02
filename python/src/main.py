@@ -8,7 +8,7 @@ import pathlib
 import sys
 
 
-def _generate_error_message(arg: str, example: str, value: str) -> str:
+def _error(arg: str, example: str, value: str) -> str:
     """
     Generate an error message for the command line inputs
 
@@ -18,7 +18,7 @@ def _generate_error_message(arg: str, example: str, value: str) -> str:
     :returns: A string explaining how to use the argument properly
     """
 
-    return (
+    raise ValueError(
         f"The {arg} input must be a decimal integer, "
         f"e.g. {example}, not {value}."
     )
@@ -53,28 +53,24 @@ def main():
     part = args.part
 
     if not year.isdecimal():
-        raise ValueError(
-            _generate_error_message(arg="year", example="2015", value=year)
-        )
+        _error(arg="year", example="2015", value=year)
     year = int(year)
 
     if not day.isdecimal():
-        raise ValueError(
-            _generate_error_message(arg="day", example="1", value=day)
-        )
+        _error(arg="day", example="1", value=day)
     day = int(day)
 
     if part is not None:
         if not part.isdecimal():
-            raise ValueError(
-                _generate_error_message(arg="part", example="1", value=part)
-            )
+            _error(arg="part", example="1", value=part)
         part = int(part)
 
     YEARS = {
         2015: "twentyfifteen",
         2023: "twentytwentythree",
+        2024: "twentytwentyfour",
     }
+
     if year not in YEARS:
         raise ValueError(f"Advent of Code {year} is not currently supported")
     year_module = YEARS[year]
