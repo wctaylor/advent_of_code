@@ -9,16 +9,33 @@ How many times does "XMAS" appear?
 
 Part 2
 ------
+How many times does "MAS" appear in an "X" shape?
 """
 
 
 from collections.abc import Iterable
 
 
+class Find:
+    """
+    A class representing a found word in the word search
+    """
+
+    def __init__(
+        self,
+        word: str,
+        position: tuple[int, int],
+        direction: tuple[int, int],
+    ) -> None:
+        self.word = word
+        self.position = position
+        self.direction = direction
+
+
 def _find_words(
     puzzle: list[str],
     word: str,
-    directions: Iterable[tuple[tuple[int], tuple[int]]],
+    directions: Iterable[Find],
 ) -> list[tuple[int]]:
     """
     Find all occurrences of the given word,
@@ -39,6 +56,7 @@ def _find_words(
     for row, line in enumerate(puzzle):
         width = len(line)
         for col, char in enumerate(line):
+            position = (row, col)
             for direction in directions:
                 if not (
                     (0 <= row + (length_word - 1) * direction[0] < height)
@@ -54,9 +72,34 @@ def _find_words(
                         matched = False
                         break
                 if matched:
-                    finds.append(((row, col), direction))
+                    finds.append(Find(word, position, direction))
 
     return finds
+
+
+def _get_character_point(find: Find, character: str) -> tuple[int, int]:
+    """
+    Get the point within the original puzzle of the specified character
+    within the Find
+
+    :param find: The Find to use
+    :param character: The character of interest
+    :returns:
+        A (row, col) position to use within the context of the original
+        puzzle
+    """
+
+    row = (
+        find.position[0]
+        + (find.word.index(character) * find.direction[0])
+    )
+
+    col = (
+        find.position[1]
+        + (find.word.index(character) * find.direction[1])
+    )
+
+    return (row, col)
 
 
 def solve(puzzle: list[str], part: int | None = None) -> None:
@@ -90,30 +133,15 @@ def solve(puzzle: list[str], part: int | None = None) -> None:
             (1, 1),
         }
         word = "MAS"
-        intersection = "A"
+        cross_character = "A"
         finds = _find_words(puzzle, word, directions)
 
         count_cross = 0
         for i in range(len(finds)):
-            intersection_row_1 = (
-                finds[i][0][0] + (word.index(intersection) * finds[i][1][0])
-            )
-            intersection_col_1 = (
-                finds[i][0][1] + (word.index(intersection) * finds[i][1][1])
-            )
-
+            cross_point_1 = _get_character_point(finds[i], cross_character)
             for j in range(i+1, len(finds)):
-                intersection_row_2 = (
-                    finds[j][0][0] + (word.index(intersection) * finds[j][1][0])
-                )
-                intersection_col_2 = (
-                    finds[j][0][1] + (word.index(intersection) * finds[j][1][1])
-                )
-                if (
-                    intersection_row_1 == intersection_row_2
-                    and intersection_col_1 == intersection_col_2
-                ):
+                cross_point_2 = _get_character_point(finds[j], cross_character)
+                if cross_point_1 == cross_point_2:
                     count_cross += 1
 
         print(f"The number of times X-{word} appears is {count_cross}")
-
